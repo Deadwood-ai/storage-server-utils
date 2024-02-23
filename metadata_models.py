@@ -1,7 +1,9 @@
+from typing import Optional
 from enum import Enum
 from datetime import datetime
 
-from pydantic import BaseModel, field_serializer, computed_field
+from pydantic import BaseModel, field_serializer, computed_field, field_validator
+from rasterio.coords import BoundingBox
 
 
 class PlatformEnum(str, Enum):
@@ -39,11 +41,34 @@ class FileUploadMetadata(BaseModel):
     license: LicenseEnum
     status: StatusEnum = StatusEnum.pending
 
+    # optional fields
+    compress_time: Optional[float] = None
+    wms_source: Optional[str] = None
+    bbox: Optional[BoundingBox] = None
+
+
     @computed_field
     @property
     def file_id(self) -> str:
         return f"{self.uuid}_{self.file_name}"
-    
-    @field_serializer('aquisition_date', 'upload_date', mode='plain')
+
+    @field_serializer('aquisition_date', 'upload_date', 'compress_time', mode='plain')
     def datetime_to_isoformat(field: datetime) -> str:
         return field.isoformat()
+    
+    @field_validator('bbox', mode='before')
+    @classmethod
+    def transform_bbox(cls, raw_string: str | BoundingBox) -> BoundingBox:
+        if isinstance(raw_string, str):
+            # parse the string
+            s = raw_string.replace('BOX(', '').replace(')', '')
+            ll, ur = s.split(',')
+            left, bottom = ll.split(' ')
+            right, upper = ur.split(' ')
+            return BoundingBox(float(left), float(bottom), float(right), float(upper))
+        else:
+            return raw_string
+
+    @field_serializer('bbox', mode='plain')
+    def bbox_to_postgis(field: BoundingBox) -> str:
+        return f"BOX({field.bottom} {field.left}, {field.upper} {field.right})"
