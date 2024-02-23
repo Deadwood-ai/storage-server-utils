@@ -33,6 +33,8 @@ class Settings(BaseSettings):
 
     # supabase settings
     metadata_table: str = 'metadata'
+    processor_username: str = 'processor@deadtrees.earth'
+    processor_password: str = 'processor'
 
     @property
     def base_path(self) -> Path:
