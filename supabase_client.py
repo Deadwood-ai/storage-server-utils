@@ -1,4 +1,4 @@
-from typing import Union, Generator, Literal
+from typing import Union, Generator, Literal, Optional
 
 from supabase import create_client
 from supabase.client import Client
@@ -31,14 +31,15 @@ def verify_token(jwt: str) -> Union[Literal[False], str]:
     
 
 @contextmanager
-def use_client(access_token: str) -> Generator[Client, None, None]:
+def use_client(access_token: Optional[str] = None) -> Generator[Client, None, None]:
     # create a supabase client
     client = create_client(settings.supabase_url, settings.supabase_key)
 
     # yield the client
     try:
-        # set the access token to the postgrest (rest-api) client
-        client.postgrest.auth(token=access_token)
+        # set the access token to the postgrest (rest-api) client if available
+        if access_token is not None:
+            client.postgrest.auth(token=access_token)
         
         yield client
     finally:
