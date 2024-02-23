@@ -17,6 +17,9 @@ class Settings(BaseSettings):
 
     # location for raw file uploads
     raw_upload_dir: str = "raw_uploads"
+    processed_dir: str = "processed"
+    archive_dir: str = "archive"
+
 
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
@@ -42,6 +45,22 @@ class Settings(BaseSettings):
     @property
     def raw_upload_path(self) -> Path:
         path = self.base_path / self.raw_upload_dir
+        if not path.exists():
+            path.mkdir(parents=True, exist_ok=True)
+        
+        return path
+    
+    @property
+    def processed_path(self) -> Path:
+        path = self.base_path / self.processed_dir
+        if not path.exists():
+            path.mkdir(parents=True, exist_ok=True)
+        
+        return path
+    
+    @property
+    def archive_path(self) -> Path:
+        path = self.base_path / self.archive_dir
         if not path.exists():
             path.mkdir(parents=True, exist_ok=True)
         
