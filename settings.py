@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     processed_dir: str = "processed"
     archive_dir: str = "archive"
 
-
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
     supabase_key: Optional[str] = None
@@ -35,6 +34,11 @@ class Settings(BaseSettings):
     metadata_table: str = 'metadata'
     processor_username: str = 'processor@deadtrees.earth'
     processor_password: str = 'processor'
+
+    # SFTP settings
+    ssh_user: Optional[str] = None
+    ssh_host: Optional[str] = None
+    ssh_password: Optional[str] = None
 
     @property
     def base_path(self) -> Path:
