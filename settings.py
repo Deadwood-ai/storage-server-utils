@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     processed_dir: str = "processed"
     archive_dir: str = "archive"
 
+    # mapserver settings
+    mapfile_dir: str = "mapfiles"
+
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
     supabase_key: Optional[str] = None
@@ -67,6 +70,14 @@ class Settings(BaseSettings):
     @property
     def archive_path(self) -> Path:
         path = self.base_path / self.archive_dir
+        if not path.exists():
+            path.mkdir(parents=True, exist_ok=True)
+        
+        return path
+    
+    @property
+    def mapfile_path(self) -> Path:
+        path = self.base_path / self.mapfile_dir
         if not path.exists():
             path.mkdir(parents=True, exist_ok=True)
         
