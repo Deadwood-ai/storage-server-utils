@@ -33,7 +33,8 @@ class FileUploadMetadata(BaseModel):
     file_name: str
     content_type: str
     file_size: int
-    target_path: str
+    raw_path: str
+    processed_path: Optional[str] = None
     copy_time: float
     uuid: str
     sha256: str
@@ -52,7 +53,7 @@ class FileUploadMetadata(BaseModel):
     def file_id(self) -> str:
         return f"{self.uuid}_{self.file_name}"
 
-    @field_serializer('aquisition_date', 'upload_date', 'compress_time', mode='plain')
+    @field_serializer('aquisition_date', 'upload_date', mode='plain')
     def datetime_to_isoformat(field: datetime) -> str:
         return field.isoformat()
     
@@ -71,4 +72,6 @@ class FileUploadMetadata(BaseModel):
 
     @field_serializer('bbox', mode='plain')
     def bbox_to_postgis(field: BoundingBox) -> str:
+        if field is None:
+            return None
         return f"BOX({field.bottom} {field.left}, {field.upper} {field.right})"

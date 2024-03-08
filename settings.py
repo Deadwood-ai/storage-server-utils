@@ -7,11 +7,15 @@ from pathlib import Path
 load_dotenv()
 
 
-BASE = str(Path(__file__).parent.parent / "data")
+BASE = str(Path(__file__).parent.parent.parent / "data")
 
 
 # load the settings from environment variables
 class Settings(BaseSettings):
+    # set if the current part of the application is working local to the different storages
+    storage_local: bool = True
+    mapserver_local: bool = True
+
     # base directory for the storage app
     base_dir: str = BASE
 
@@ -22,6 +26,7 @@ class Settings(BaseSettings):
 
     # mapserver settings
     mapfile_dir: str = "mapfiles"
+    ows_base_url: str = "http://localhost:8080/mapserver?"
 
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
@@ -39,9 +44,14 @@ class Settings(BaseSettings):
     processor_password: str = 'processor'
 
     # SFTP settings
-    ssh_user: Optional[str] = None
-    ssh_host: Optional[str] = None
-    ssh_password: Optional[str] = None
+    storage_ssh_user: Optional[str] = None
+    storage_ssh_host: Optional[str] = None
+    storage_ssh_password: Optional[str] = None
+
+    # mapserver settings
+    mapserver_ssh_user: Optional[str] = None
+    mapserver_ssh_host: Optional[str] = None
+    mapserver_ssh_password: Optional[str] = None
 
     @property
     def base_path(self) -> Path:
