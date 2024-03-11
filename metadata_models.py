@@ -74,4 +74,4 @@ class FileUploadMetadata(BaseModel):
     def bbox_to_postgis(field: BoundingBox) -> str:
         if field is None:
             return None
-        return f"BOX({field.bottom} {field.left}, {field.upper} {field.right})"
+        return f"BOX({field.bottom} {field.left}, {field.top} {field.right})"
