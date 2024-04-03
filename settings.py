@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union, Literal
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from pathlib import Path
@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     # Compression settings for the processor
     processor_compression: Optional[str] = None
     compression_quality: Optional[int] = None
+    scale_factor: Union[float, Literal['auto']] = 1 / 10
 
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
