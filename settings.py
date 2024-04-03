@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     mapfile_dir: str = "mapfiles"
     ows_base_url: str = "http://localhost:8080/mapserver?"
 
+    # Compression settings for the processor
+    processor_compression: Optional[str] = None
+    compression_quality: Optional[int] = None
+
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
     supabase_key: Optional[str] = None
