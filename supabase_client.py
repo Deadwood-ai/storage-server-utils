@@ -11,7 +11,8 @@ def login(user: str, password: str):
     # create a supabase client
     client = create_client(settings.supabase_url, settings.supabase_key)
 
-    auth_response = client.auth.sign_in_with_password({'email': user, 'password': password})
+    client.auth.sign_in_with_password({'email': user, 'password': password})
+    auth_response = client.auth.refresh_session()
     
     client.auth.sign_out()
     # return the response
