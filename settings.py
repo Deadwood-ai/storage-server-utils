@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     processor_compression: Optional[str] = None
     compression_quality: Optional[int] = None
     scale_factor: Union[float, Literal['auto']] = 1 / 10
+    processor_image_driver: str = "GTiff"
 
     # supabase settings for supabase authentication
     supabase_url: Optional[str] = None
